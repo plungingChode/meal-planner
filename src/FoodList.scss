@@ -1,0 +1,58 @@
+@use 'DataTable' as *;
+
+$header-row-height: 30px;
+
+.FoodList-table {
+  max-height: 100vh;
+  overflow-y: hidden !important;
+
+  @media screen and (max-width: 1024px) {
+    max-height: 50vh;
+  }
+}
+
+.FoodList-body {
+  height: calc(100vh - $header-row-height);
+
+  @media screen and (max-width: 1024px) {
+    height: calc(50vh - $header-row-height)
+  }
+}
+
+.FoodList-header,
+.FoodList-row {
+  > :nth-child(1) {
+    flex: 0.1 0 1.25rem;
+    min-width: 1.5rem;
+    text-align: end;
+    // padding-right: 0.4rem;
+  }
+  > :nth-child(2) {
+    flex: 5 0 9rem;
+    min-width: 9rem;
+  }
+  > :nth-child(3) {
+    flex: 1 0 6rem;
+    min-width: 6rem;
+  }
+  > :nth-child(4),
+  > :nth-child(5),
+  > :nth-child(6),
+  > :nth-child(7) {
+    flex: 1 0 4rem;
+    min-width: 4rem;
+    text-align: right;
+  }
+  > :nth-child(8) {
+    flex: 1 0 4rem;
+    min-width: 4rem;
+    padding-right: 0.75rem;
+    text-align: center;
+  }
+}
+
+.FoodList-row {
+  &.odd {
+    background-color: $table-stripe-color;
+  }
+}

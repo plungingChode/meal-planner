@@ -1,0 +1,52 @@
+* {
+  box-sizing: border-box;
+}
+
+.App {
+  display: flex;
+  min-height: 100vh;
+  
+  background-color: white;
+
+  &-menubar {
+    min-width: 3rem;
+    width: 3rem;
+    min-height: 100vh;
+
+    background-color: salmon;
+    border-right: 1px solid black;
+  }
+
+  &-columns {
+    display: flex;
+    // gap: 1rem;
+    width: 100%;
+    max-width: calc(100% - 3rem);
+  }
+
+  &-column {
+    width: 50%;
+    min-height: 100vh;
+    max-height: 100vh;
+
+    background-color: white;
+    border-right: 1px solid black;
+  }
+
+  &-mealList {
+    padding: 0.5rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    &-columns {
+      // display: block;
+      flex-direction: column;
+    }
+
+    &-column {
+      width: 100%;
+      min-height: calc(50vh - 0.5rem);
+      max-height: unset;
+    }
+  }
+}

@@ -1,0 +1,26 @@
+.MealTableFooter-limit {
+  display: block;
+  font-size: 80%;
+  opacity: 0.7;
+
+  // &.tooHigh, &.tooLow {
+  //   color: red;
+  // }
+}
+
+.MealTableFooter-sum {
+  display: block;
+  font-weight: 600;
+
+  &.tooHigh, &.tooLow {
+    color: red;
+  }
+
+  &.tooHigh::before {
+    content: '^ ';
+  }
+  &.tooLow::before {
+    content: 'v ';
+  }
+}
+

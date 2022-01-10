@@ -1,0 +1,63 @@
+$table-bg-color: white;
+$table-highlight-color: lightblue;
+$table-stripe-color: hsl(0, 0%, 95%);
+$table-border-color: hsl(0, 0%, 88%);
+
+.DataTable-responsiveWrapper {
+  position: relative;
+  width: 100%;
+  border-radius: inherit;
+  overflow-x: auto;
+  overflow-y: scroll;
+}
+
+.DataTable-wrapper {
+  position: relative;
+  width: 100%;
+  display: table;
+}
+
+.DataTable {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  background-color: $table-bg-color;
+  font-size: 14px;
+}
+
+.DataTable-header,
+.DataTable-row {
+  display: flex;
+  border-bottom: 1px solid $table-border-color;
+
+  > div {
+    display: inline-block;
+
+    padding: 0.3rem 0.25rem;
+    // border-left: 1px solid red;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
+
+.DataTable-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  background-color: $table-bg-color;
+  font-weight: 600;
+}
+
+.DataTable-row {
+  &.striped:nth-of-type(2n+1) {
+    background-color: $table-stripe-color;
+  }
+
+  &:hover {
+    background-color: $table-highlight-color;
+  }
+}

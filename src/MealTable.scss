@@ -1,0 +1,87 @@
+@use 'DataTable' as *;
+@use 'sass:color';
+
+$selection-color: red;
+
+.MealTable {
+  max-height: 16.5rem;
+  transform: scale(0.97, 0.97);
+  transition: transform 0.3s ease-in-out;
+  border: 1px solid $table-border-color;
+}
+
+.MealTable-selected {
+  box-shadow: 2px 2px 3px 1px #00000044;
+  transform: scale(1.0, 1.0);
+  transition: transform 0.3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%   { scale: 0.98; }
+  50%  { scale: 1.02; }
+  100% { scale: 0.98; }
+}
+
+.MealTable-targeted {
+  animation: pulse 1.25s infinite ease-in-out;
+}
+
+.MealTable-header,
+.MealTable-row {
+  > :nth-child(1) {
+    flex: 0.1 0 1rem;
+    min-width: 0.5rem;
+  }
+  > :nth-child(2) {
+    flex: 5 0 9rem;
+    min-width: 9rem;
+  }
+  > :nth-child(3) {
+    flex: 1 0 6rem;
+    min-width: 6rem;
+  }
+  > :nth-child(4),
+  > :nth-child(5),
+  > :nth-child(6),
+  > :nth-child(7) {
+    flex: 1 0 4rem;
+    min-width: 4rem;
+    text-align: right;
+  }
+  > :nth-child(8) {
+    flex: 1 0 4rem;
+    min-width: 4rem;
+    text-align: center;
+  }
+}
+
+.MealTable-titleBar {
+  position: sticky;
+  top: 0.25rem;
+  left: 0.25rem;
+  z-index: 2;
+
+  width: fit-content;
+  height: 1.35rem;
+  margin-bottom: -1.35rem;
+
+  font-weight: 600;
+}
+
+.MealTable-actions {
+  margin-left: 0.5rem;
+}
+
+
+.MealTable-row.footer {
+  position: sticky;
+  bottom: 0;
+
+  background: $table-bg-color;
+  border-top: 1px solid $table-border-color;
+  border-bottom-style: none;
+
+  &:hover {
+    background: $table-bg-color;
+  }
+}
