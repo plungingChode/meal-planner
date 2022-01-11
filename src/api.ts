@@ -116,6 +116,16 @@ async function getMeals(
     where('date', '<=', endDate ?? beginDate)
   ));
   const meals = snapshot.docs.map(doc => doc.data());
+  meals.sort((a, b) => {
+    const nsA = (+a.date);
+    const nsB = (+b.date);
+
+    return nsA === nsB
+      ? a.order - b.order
+      : nsA - nsB;
+  });
+
+  console.log(meals);
 
   return meals;
 }
@@ -140,11 +150,13 @@ export {
   addMealBlueprint,
 }
 
-export default {
+const API = {
   getFoodList,
   getMeals,
   addMeal,
   updateMeal,
   getMealBlueprints,
   addMealBlueprint,
-};
+}
+
+export default API;

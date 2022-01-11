@@ -43,12 +43,14 @@ interface Meal {
   portions: FoodPortion[];
   limits: NutrientLimits;
   date: Date;
+  order: number;
 }
 
 interface MealBlueprint {
   id?: string;
   name: string;
   limits: NutrientLimits;
+  order: number;
 }
 
 interface MealPlan {

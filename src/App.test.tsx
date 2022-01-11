@@ -3,59 +3,11 @@ import type { FoodRecord, Meal, NutrientLimits } from './models';
 import React from 'react';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import { Simulate } from 'react-dom/test-utils';
+import { food, limits, meal } from './__mocks__/mockData';
 
 jest.mock('./api');
 import API from './api';
 import App from './App';
-
-// #region Mock data
-const food: FoodRecord[] = [
-  {
-    id: 'A',
-    name: "A",
-    category: 1,
-    refAmount: 1,
-    refUnit: "g",
-    portionMultiplier: 1.0,
-    energy: 1,
-    carbohydrates: 1,
-    protein: 1,
-    fat: 1,
-    comment: "-"
-  },
-  {
-    id: 'B',
-    name: "B",
-    category: 2,
-    refAmount: 2,
-    refUnit: "g",
-    portionMultiplier: 0.5,
-    energy: 2,
-    carbohydrates: 2,
-    protein: 2,
-    fat: 2,
-    comment: "-"
-  }
-];
-
-const limits: NutrientLimits = {
-  energy: 1,
-  carbohydrates: { min: 1, max: 2 },
-  protein: { min: 99, max: Number.POSITIVE_INFINITY },
-  fat: 0,
-}
-
-const meal: Meal = {
-  id: 'meal-1',
-  name: 'Meal 1',
-  portions: [
-    { food: food[0], qty: 1 },
-    { food: food[1], qty: 1 },
-  ],
-  limits: limits,
-  date: new Date(2001, 0, 13),
-}
-// #endregion
 
 describe('App', () => {
   // Set screen width & height for react-virtualized-auto-sizer
