@@ -1,4 +1,5 @@
 interface FoodRecord {
+  id?: string;
   name: string;
   category: number;
 
@@ -41,6 +42,18 @@ interface Meal {
   name: string;
   portions: FoodPortion[];
   limits: NutrientLimits;
+  date: Date;
+}
+
+interface MealBlueprint {
+  id?: string;
+  name: string;
+  limits: NutrientLimits;
+}
+
+interface MealPlan {
+  id?: string;
+  mealBlueprints: MealBlueprint[];
 }
 
 export type {
@@ -49,5 +62,7 @@ export type {
   FoodPortion,
   Interval,
   NutrientLimits,
-  Meal
+  Meal,
+  MealBlueprint,
+  MealPlan
 }

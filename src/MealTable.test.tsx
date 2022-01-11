@@ -1,7 +1,7 @@
 import type { FoodPortion, FoodRecord, Meal, NutrientLimits } from './models';
 
 import React from 'react';
-import { render, screen, getAllByRole, getByRole, getByTestId } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { Simulate } from 'react-dom/test-utils';
 
 import MealTable from './MealTable';
@@ -51,12 +51,13 @@ describe('MealTable', () => {
       { food: food[1], qty: 1 },
     ],
     limits: limits,
+    date: new Date(2001, 0, 13),
   }
   // #endregion
 
   // TODO test onQuantityChanged
   describe('Table rows', () => {
-    const removePortion = jest.fn((food: FoodPortion, mealID: string) => {});
+    const removePortion = jest.fn();
 
     render(
       <MealTable
@@ -68,11 +69,11 @@ describe('MealTable', () => {
 
     test('onPortionRemoved is called', () => {
       const tableBody = screen.getByRole('rowgroup');
-      const firstRow = getAllByRole(tableBody, 'row')[0];
-      const firstRowCells = getAllByRole(firstRow, 'cell');
+      const firstRow = within(tableBody).getAllByRole('row')[0];
+      const firstRowCells = within(firstRow).getAllByRole('cell');
       const lastCell = firstRowCells[firstRowCells.length - 1];
 
-      const removeButton = getByRole(lastCell, 'button');
+      const removeButton = within(lastCell).getByRole('button');
 
       Simulate.click(removeButton);
       expect(removePortion).toBeCalledTimes(1);
@@ -160,4 +161,4 @@ describe('MealTable', () => {
       expect(minDisplay).toHaveTextContent('-');
     });
   });
-})
+});

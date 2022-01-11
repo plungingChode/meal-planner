@@ -1,7 +1,7 @@
 import type { FoodPortion, FoodRecord, Meal, NutrientLimits } from './models';
 
 import React from 'react';
-import { render, screen, getAllByRole, getByRole, getByTestId } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { Simulate } from 'react-dom/test-utils';
 
 import FoodList from './FoodList';
@@ -57,10 +57,10 @@ describe('FoodList', () => {
     );
 
     const tableBody = screen.getByRole('rowgroup');
-    const firstRow = getAllByRole(tableBody, 'row')[0];
-    const firstRowCells = getAllByRole(firstRow, 'cell');
+    const firstRow = within(tableBody).getAllByRole('row')[0];
+    const firstRowCells = within(firstRow).getAllByRole('cell');
     const lastCell = firstRowCells[firstRowCells.length - 1];
-    const [addPortion, addUnit] = getAllByRole(lastCell, 'button');
+    const [addPortion, addUnit] = within(lastCell).getAllByRole('button');
 
     Simulate.mouseEnter(addPortion);
     expect(onAddAmountHovered).toBeCalledWith(true);

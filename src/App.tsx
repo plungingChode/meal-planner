@@ -1,4 +1,4 @@
-import type { FoodPortion, FoodRecord, Meal } from './models';
+import type { FoodPortion, FoodRecord, Meal, MealBlueprint } from './models';
 
 import React, { useEffect, useReducer, useState } from 'react';
 import './App.scss';
@@ -7,16 +7,18 @@ import Menubar from './Menubar';
 import MealDisplay from './MealDisplay';
 
 import { pureInsert, pureDelete } from './pureutil';
-import { getFoodList, getMeals } from './api';
+import API from './api';
 
 type AppState = {
   selectedMeal: string;
   meals: Meal[];
+  blueprints: MealBlueprint[];
 };
 
 type AppAction =
   | { type: 'setSelectedMeal', payload: string }
   | { type: 'setMeals', payload: Meal[] }
+  | { type: 'setBlueprints', payload: MealBlueprint[] }
   | { type: 'addPortion', payload: FoodRecord }
   | { type: 'removePortion', food: FoodPortion, mealID: string }
 
@@ -28,19 +30,23 @@ type AppAction =
  * @returns A new state with a portion of `food` added.
  */
 function addPortion(state: AppState, food: FoodRecord): AppState {
+  if (!state.selectedMeal) {
+    throw new Error('No meal selected');
+  }
+
   const portion = {
     food: food,
     qty: 1
   }
-  
+
   const mealIdx = state.meals.findIndex(m => m.id === state.selectedMeal);
   const oldMeal = state.meals[mealIdx];
 
   const oldPortions = oldMeal.portions;
-  const portionIdx = oldPortions.findIndex(p => p.food.name === food.name);
+  const portionIdx = oldPortions.findIndex(p => p.food.id === food.id);
   if (portionIdx !== -1) {
     // If a portion of a food exists, use its quantity
-    portion.qty = oldPortions[portionIdx].qty + 1;        
+    portion.qty = oldPortions[portionIdx].qty + 1;
   }
 
   const newMeal = {
@@ -48,7 +54,7 @@ function addPortion(state: AppState, food: FoodRecord): AppState {
     portions: pureInsert(oldPortions, portion, portionIdx)
   }
 
-  return { 
+  return {
     ...state,
     meals: pureInsert(state.meals, newMeal, mealIdx)
   }
@@ -67,7 +73,7 @@ function removePortion(state: AppState, mealID: string, portion: FoodPortion): A
   const oldMeal = state.meals[mealIdx];
 
   const oldPortions = oldMeal.portions;
-  const portionIdx = oldPortions.findIndex(p => p.food.name === portion.food.name);
+  const portionIdx = oldPortions.findIndex(p => p.food.id === portion.food.id);
 
   const newMeal = {
     ...oldMeal,
@@ -80,6 +86,14 @@ function removePortion(state: AppState, mealID: string, portion: FoodPortion): A
   }
 }
 
+function setSingle(
+  state: AppState, 
+  action: AppAction & { payload: any }, 
+  field: keyof AppState
+) {
+  return { ...state, [field]: action.payload }
+}
+
 function reducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
     case 'setSelectedMeal':
@@ -88,10 +102,15 @@ function reducer(state: AppState, action: AppAction): AppState {
         selectedMeal: action.payload
       }
     case 'setMeals':
+      const meals = action.payload;
+
       return {
         ...state,
-        meals: action.payload,
+        selectedMeal: meals.length ? meals[0].id : '',
+        meals: meals
       }
+    case 'setBlueprints':
+      return setSingle(state, action, 'blueprints');
     case 'addPortion':
       return addPortion(state, action.payload);
     case 'removePortion':
@@ -101,45 +120,55 @@ function reducer(state: AppState, action: AppAction): AppState {
   }
 }
 
+const USER_ID = 'some-user-id';
+
 function App() {
   const [data, setData] = useState<FoodRecord[]>([]);
   const [state, dispatch] = useReducer(reducer, {
     selectedMeal: '',
-    meals: []
+    meals: [],
+    blueprints: [],
   });
 
-  // Load user data from server
-  useEffect(() => {
-    getFoodList('xxx')
-      .then(list => setData(list));
-      
-    getMeals('xxx', new Date())
-      .then(meals => dispatch({ type: 'setMeals', payload: meals }));
-  }, [])
+  // Load initial data from server
+  useEffect(
+    () => {
+      API.getFoodList(USER_ID)
+        .then(list => setData(list));
 
-return (
-  <div className='App'>
-    <div className='App-menubar'>
-      <Menubar />
-    </div>
-    <div className='App-columns'>
-      <div className='App-column'>
-        <FoodList
-          data={data}
-          onAddPortionClicked={food => dispatch({ type: 'addPortion', payload: food })}
-        />
+      API.getMealBlueprints(USER_ID, 'test-project')
+        .then(blueprints => dispatch({ type: 'setBlueprints', payload: blueprints }));
+
+      API.getMeals(USER_ID, 'test-project', new Date(2001, 0, 12))
+        .then(meals => dispatch({ type: 'setMeals', payload: meals }));
+    },
+    []
+  );
+
+  return (
+    <div className='App'>
+      <div className='App-menubar'>
+        <Menubar />
       </div>
-      <div className='App-column App-mealList'>
-        <MealDisplay
-          meals={state.meals}
-          selectedMealTable={state.selectedMeal}
-          onSelectionChanged={id => dispatch({ type: 'setSelectedMeal', payload: id })}
-          onPortionRemoved={(food, mealID) => dispatch({ type: 'removePortion', food, mealID })}
-        />
+      <div className='App-columns'>
+        <div className='App-column' data-testid='foodlist-col'>
+          <FoodList
+            data={data}
+            onAddPortionClicked={food => dispatch({ type: 'addPortion', payload: food })}
+          />
+        </div>
+        <div className='App-column App-mealList' data-testid='meals-col'>
+          <MealDisplay
+            meals={state.meals}
+            selectedMealTable={state.selectedMeal}
+            onSelectionChanged={id => dispatch({ type: 'setSelectedMeal', payload: id })}
+            onPortionRemoved={(food, mealID) => dispatch({ type: 'removePortion', food, mealID })}
+          />
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
 }
 
 export default App;
+export type { AppState }
