@@ -145,7 +145,7 @@ function MealTable(props: MealTableProps) {
         'DataTable-responsiveWrapper', 
         'MealTable', 
         { 
-          'MealTable-selected': props.selected 
+          'selected': props.selected 
         }
       )}
       onClick={() => onSelect && onSelect(props.meal.id)}

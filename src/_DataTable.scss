@@ -57,7 +57,7 @@ $table-border-color: hsl(0, 0%, 88%);
     background-color: $table-stripe-color;
   }
 
-  &:hover {
+  &:hover, &.striped:hover {
     background-color: $table-highlight-color;
   }
 }
