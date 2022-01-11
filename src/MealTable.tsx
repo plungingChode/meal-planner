@@ -1,5 +1,5 @@
 import type { CellProps, Column, TableInstance, TableOptions } from 'react-table';
-import type { FoodRecord, FoodPortion, FoodNutrients, NutrientLimits, Meal } from './models';
+import type { Food, FoodPortion, FoodNutrients, NutrientLimits, Meal } from './models';
 
 import React from 'react';
 import { useTable } from 'react-table';
@@ -11,7 +11,7 @@ import './MealTable.scss'
 
 interface MealTableProps {
   meal: Meal;
-  onQuantityChanged: (food: FoodRecord) => void;
+  onQuantityChanged: (food: Food) => void;
   onPortionRemoved: (food: FoodPortion, mealID: string) => void;
   onScrollYChanged?: (e: React.UIEvent) => void;
   scrollY?: number;
@@ -32,7 +32,7 @@ type ActionCellProps<D extends object> =
   & CellProps<D, null>
   & { 
     mealID: string;
-    onQuantityChanged: (food: FoodRecord) => void;
+    onQuantityChanged: (food: Food) => void;
     onPortionRemoved: (food: FoodPortion, mealID: string) => void;
   }
 

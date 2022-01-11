@@ -1,11 +1,11 @@
-import type { FoodPortion, FoodRecord, Meal, NutrientLimits } from './models';
+import type { FoodPortion, Food, Meal, NutrientLimits } from './models';
 
 import React from 'react';
 import { render, screen, within } from '@testing-library/react';
 import { Simulate } from 'react-dom/test-utils';
 import { food, limits, meal } from './__mocks__/mockData';
 
-import FoodList from './FoodList';
+import FoodList from './FoodListTable';
 
 describe('FoodList', () => {
   // Set screen width & height for react-virtualized-auto-sizer
@@ -16,8 +16,8 @@ describe('FoodList', () => {
 
   test('addPortion works correctly', () => {
     const onAddAmountHovered = jest.fn((hovered: boolean) => { });
-    const onAddPortionClicked = jest.fn((food: FoodRecord) => { });
-    const onAddUnitClicked = jest.fn((food: FoodRecord) => { });
+    const onAddPortionClicked = jest.fn((food: Food) => { });
+    const onAddUnitClicked = jest.fn((food: Food) => { });
 
     render(
       <FoodList

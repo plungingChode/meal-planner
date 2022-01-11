@@ -2,7 +2,7 @@ import type { FoodNutrients, FoodPortion, NutrientLimits, Interval } from './mod
 
 import React from 'react';
 import cx from 'classnames';
-import { formatNutrient } from './FoodList';
+import { formatNutrient } from './FoodListTable';
 
 import './MealTableFooterCell.scss';
 

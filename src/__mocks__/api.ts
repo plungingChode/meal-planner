@@ -1,4 +1,4 @@
-import type { FoodRecord, Meal, MealBlueprint, NutrientLimits } from '../models';
+import type { Food, Meal, MealBlueprint, NutrientLimits } from '../models';
 
 import { food, limits, meal } from './mockData'
 

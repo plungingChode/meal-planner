@@ -1,4 +1,4 @@
-import type { FoodNutrients, FoodRecord } from './models';
+import type { FoodNutrients, Food } from './models';
 import type { Column, CellProps, TableOptions } from 'react-table';
 
 import React, { useCallback } from 'react'
@@ -10,16 +10,16 @@ import cx from 'classnames';
 
 import './FoodList.scss';
 
-interface FoodListProps {
-  data: FoodRecord[],
+interface FoodListTableProps {
+  data: Food[],
   onAddAmountHovered?: (hovered: boolean) => void;
-  onAddPortionClicked?: (record: FoodRecord) => void;
+  onAddPortionClicked?: (record: Food) => void;
   onAddUnitClicked?: () => void;
 }
 
 type ActionCellProps<D extends object> = CellProps<D, null> & {
   onAddAmountHovered?: (hovered: boolean) => void;
-  onAddPortionClicked?: (record: FoodRecord) => void;
+  onAddPortionClicked?: (record: Food) => void;
   onAddUnitClicked?: () => void;
 }
 
@@ -37,7 +37,7 @@ const EGG_ICON = '🥚';
 const LIGHTNING_ICON = '⚡';
 const BREAD_ICON = '🍞';
 
-const columns: Column<FoodRecord>[] = [
+const columns: Column<Food>[] = [
   {
     id: 'category',
     accessor: 'category',
@@ -51,41 +51,41 @@ const columns: Column<FoodRecord>[] = [
   },
   {
     id: 'reference',
-    accessor: (food: FoodRecord) => food.refAmount,
+    accessor: (food: Food) => food.refAmount,
     Header: 'ref?',
-    Cell: (c: CellProps<FoodRecord, number>) => c.value + c.row.original.refUnit,
+    Cell: (c: CellProps<Food, number>) => c.value + c.row.original.refUnit,
   },
   {
     id: 'energy',
     accessor: 'energy',
     Header: LIGHTNING_ICON,
-    Cell: (c: CellProps<FoodRecord, number>) => formatNutrient(c.value, 'energy'),
+    Cell: (c: CellProps<Food, number>) => formatNutrient(c.value, 'energy'),
   },
   {
     id: 'carbohydrates',
     accessor: 'carbohydrates',
     Header: BREAD_ICON,
-    Cell: (c: CellProps<FoodRecord, number>) => formatNutrient(c.value, 'carbohydrates'),
+    Cell: (c: CellProps<Food, number>) => formatNutrient(c.value, 'carbohydrates'),
   },
   {
     id: 'protein',
     accessor: 'protein',
     Header: EGG_ICON,
-    Cell: (c: CellProps<FoodRecord, number>) => formatNutrient(c.value, 'protein'),
+    Cell: (c: CellProps<Food, number>) => formatNutrient(c.value, 'protein'),
   },
   {
     id: 'fat',
     accessor: 'fat',
     Header: BUTTER_ICON,
-    Cell: (c: CellProps<FoodRecord, number>) => formatNutrient(c.value, 'fat'),
+    Cell: (c: CellProps<Food, number>) => formatNutrient(c.value, 'fat'),
   },
   {
     id: 'actions',
-    Cell: (c: ActionCellProps<FoodRecord>) => FoodListActions({ ...c, record: c.row.original })
+    Cell: (c: ActionCellProps<Food>) => FoodListActions({ ...c, record: c.row.original })
   }
 ];
 
-function FoodList(props: FoodListProps) {
+function FoodList(props: FoodListTableProps) {
   const {
     onAddAmountHovered, 
     onAddPortionClicked, 
@@ -99,7 +99,7 @@ function FoodList(props: FoodListProps) {
     onAddAmountHovered, 
     onAddPortionClicked, 
     onAddUnitClicked,
-  } as TableOptions<FoodRecord>);
+  } as TableOptions<Food>);
 
   const {
     getTableProps,
@@ -168,7 +168,7 @@ function FoodList(props: FoodListProps) {
   )
 }
 
-function compareProps(prev: Readonly<FoodListProps>, next: Readonly<FoodListProps>) {
+function compareProps(prev: Readonly<FoodListTableProps>, next: Readonly<FoodListTableProps>) {
   return prev.data === next.data;
 }
 

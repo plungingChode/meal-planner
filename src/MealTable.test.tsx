@@ -1,4 +1,4 @@
-import type { FoodPortion, FoodRecord, Meal, NutrientLimits } from './models';
+import type { FoodPortion, Food, Meal, NutrientLimits } from './models';
 
 import React from 'react';
 import { render, screen, within } from '@testing-library/react';

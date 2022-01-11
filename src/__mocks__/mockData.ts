@@ -1,6 +1,6 @@
-import type { FoodRecord, Meal, MealBlueprint, NutrientLimits } from '../models';
+import type { Food, Meal, MealBlueprint, NutrientLimits } from '../models';
 
-const food: FoodRecord[] = [
+const food: Food[] = [
   {
     name: "A",
     category: 1,

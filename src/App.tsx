@@ -1,8 +1,8 @@
-import type { FoodPortion, FoodRecord, Meal, MealBlueprint } from './models';
+import type { FoodPortion, Food, Meal, MealBlueprint } from './models';
 
 import React, { useEffect, useReducer, useState } from 'react';
 import './App.scss';
-import FoodList from './FoodList';
+import FoodList from './FoodListTable';
 import Menubar from './Menubar';
 import MealDisplay from './MealDisplay';
 
@@ -19,7 +19,7 @@ type AppAction =
   | { type: 'setSelectedMeal', payload: string }
   | { type: 'setMeals', payload: Meal[] }
   | { type: 'setBlueprints', payload: MealBlueprint[] }
-  | { type: 'addPortion', payload: FoodRecord }
+  | { type: 'addPortion', payload: Food }
   | { type: 'removePortion', food: FoodPortion, mealID: string }
 
 /**
@@ -29,7 +29,7 @@ type AppAction =
  * @param food The food to add.
  * @returns A new state with a portion of `food` added.
  */
-function addPortion(state: AppState, food: FoodRecord): AppState {
+function addPortion(state: AppState, food: Food): AppState {
   if (!state.selectedMeal) {
     throw new Error('No meal selected');
   }
@@ -123,7 +123,7 @@ function reducer(state: AppState, action: AppAction): AppState {
 const USER_ID = 'some-user-id';
 
 function App() {
-  const [data, setData] = useState<FoodRecord[]>([]);
+  const [data, setData] = useState<Food[]>([]);
   const [state, dispatch] = useReducer(reducer, {
     selectedMeal: '',
     meals: [],

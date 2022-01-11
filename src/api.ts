@@ -1,4 +1,4 @@
-import type { FoodRecord, Meal, MealBlueprint } from './models';
+import type { Food, Meal, MealBlueprint } from './models';
 import type { FirestoreDataConverter } from '@firebase/firestore'
 
 import { initializeApp } from 'firebase/app';
@@ -55,7 +55,7 @@ function createPlainConverter<T extends { id?: string }>(): FirestoreDataConvert
 }
 
 // Converters
-const foodRecordConverter = createPlainConverter<FoodRecord>();
+const foodRecordConverter = createPlainConverter<Food>();
 const mealBlueprintConverter = createPlainConverter<MealBlueprint>();
 const mealConverter = createPlainConverter<Meal>();
 

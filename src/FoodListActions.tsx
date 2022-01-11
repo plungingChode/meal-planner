@@ -1,11 +1,11 @@
-import type { FoodRecord } from './models';
+import type { Food } from './models';
 
 import React from 'react'
 
 interface FoodListActionsProps {
-  record: FoodRecord;
+  record: Food;
   onAddAmountHovered?: (hovered: boolean) => void;
-  onAddPortionClicked?: (record: FoodRecord) => void;
+  onAddPortionClicked?: (record: Food) => void;
   onAddUnitClicked?: () => void;
 }
 

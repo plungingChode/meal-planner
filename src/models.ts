@@ -1,4 +1,4 @@
-interface FoodRecord {
+interface Food {
   id?: string;
   name: string;
   category: number;
@@ -18,7 +18,7 @@ interface FoodRecord {
 type FoodNutrients = 'energy' | 'carbohydrates' | 'protein' | 'fat'
 
 interface FoodPortion {
-  food: FoodRecord;
+  food: Food;
   qty: number;
 }
 
@@ -59,7 +59,7 @@ interface MealPlan {
 }
 
 export type {
-  FoodRecord,
+  Food,
   FoodNutrients,
   FoodPortion,
   Interval,
