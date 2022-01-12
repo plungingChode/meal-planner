@@ -93,26 +93,5 @@ describe('MealTable', () => {
       expect(minDisplay).toHaveTextContent('> 99.00');
       expect(minDisplay).toHaveClass('tooLow');
     });
-
-
-    test('displays number only limits correctly', () => {
-      render(
-        <MealTableFooterCell
-          portions={meal.portions}
-          limits={meal.limits}
-          nutrientKey='energy'
-        />
-      );
-
-      const maxDisplay = screen.getByTestId('mtfc-max');
-      const actDisplay = screen.getByTestId('mtfc-actual');
-      const minDisplay = screen.getByTestId('mtfc-min');
-
-      expect(maxDisplay).toHaveTextContent('< 1');
-      expect(maxDisplay).toHaveClass('tooHigh');
-      expect(actDisplay).toHaveTextContent('3kcal');
-      expect(actDisplay).toHaveClass('tooHigh');
-      expect(minDisplay).toHaveTextContent('-');
-    });
   });
 });

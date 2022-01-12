@@ -28,18 +28,18 @@ interface FoodPortion {
 }
 
 interface Interval { 
-  min: number, 
-  max: number 
+  min?: number;
+  max?: number;
 }
 
 /**
- * Constrain nutrients within a given interval or set an upper boundary
+ * Constrain nutrients within a given interval
  */
 interface NutrientLimits {
-  energy: number | Interval;
-  carbohydrates: number | Interval;
-  protein: number | Interval;
-  fat: number | Interval;
+  energy: Interval;
+  carbohydrates: Interval;
+  protein: Interval;
+  fat: Interval;
 }
 
 interface Meal {

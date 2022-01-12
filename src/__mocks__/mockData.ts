@@ -39,10 +39,10 @@ const food: Food[] = [
 ];
 
 const limits: NutrientLimits = {
-  energy: 1,
+  energy: { max: 1 },
   carbohydrates: { min: 1, max: 2 },
   protein: { min: 99, max: Number.POSITIVE_INFINITY },
-  fat: 0,
+  fat: { max: 0 },
 }
 
 const meal: Meal = {

@@ -28,37 +28,34 @@ function calculateNutrientSum(ps: readonly FoodPortion[], n: FoodNutrients) {
 }
 
 function extractLimits(limits: NutrientLimits, n: FoodNutrients): ExtractedLimits {
-  switch (typeof limits[n]) {
-    case 'number':
-      const limit = limits[n] as number;
-
-      return {
-        min: Number.NEGATIVE_INFINITY,
-        minStr: '-',
-        max: limit,
-        maxStr: '< ' + formatNutrient(limit, n, false),
-      }
-    case 'object':
-      const { max, min } = limits[n] as Interval;
-
-      const maxStr = max !== Number.POSITIVE_INFINITY
-        ? '< ' + formatNutrient(max, n, false)
-        : '-'
-
-      return {
-        min: min,
-        minStr: '> ' + formatNutrient(min, n, false),
-        max: max,
-        maxStr: maxStr,
-      }
-    default:
-      return {
-        min: Number.NEGATIVE_INFINITY,
-        minStr: '?',
-        max: Number.POSITIVE_INFINITY,
-        maxStr: '?',
-      }
+  const rv: ExtractedLimits = {
+    min: Number.NEGATIVE_INFINITY,
+    minStr: '?',
+    max: Number.POSITIVE_INFINITY,
+    maxStr: '?',
   }
+  
+  if (!limits[n]) {
+    return rv;
+  }
+  if (!('min' in limits[n]) && !('max' in limits[n])) {
+    return  rv;
+  }
+
+  const { max, min } = limits[n] as Interval;
+  rv.minStr = '-';
+  rv.maxStr = '-';
+  
+  if (typeof min !== 'undefined' && Number.isFinite(min)) {
+    rv.min = min;
+    rv.minStr = '> ' + formatNutrient(min, n, false);
+  }
+  if (typeof max !== 'undefined' && Number.isFinite(max)) {
+    rv.max = max;
+    rv.maxStr = '< ' + formatNutrient(max, n, false);
+  }
+
+  return rv;
 }
 
 function MealTableFooterCell(props: MealTableFooterCellProps) {
