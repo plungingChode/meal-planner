@@ -3,7 +3,7 @@ import type { Food, Meal, NutrientLimits } from './models';
 import React from 'react';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import { Simulate } from 'react-dom/test-utils';
-import { food, limits, meal } from './__mocks__/mockData';
+import { food, limits, meal } from './__mocks__/mock-data';
 
 jest.mock('./api');
 import API from './api';

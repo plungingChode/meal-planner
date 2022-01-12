@@ -3,7 +3,7 @@ import type { FoodPortion, Food, Meal, NutrientLimits } from './models';
 import React from 'react';
 import { render, screen, within } from '@testing-library/react';
 import { Simulate } from 'react-dom/test-utils';
-import { food, limits, meal } from './__mocks__/mockData';
+import { food, limits, meal } from './__mocks__/mock-data';
 
 import FoodList from './FoodListTable';
 

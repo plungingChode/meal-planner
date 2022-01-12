@@ -8,7 +8,7 @@ import type {
   SessionInfo
 } from '../models';
 
-import { food, limits, meal, categories, projects } from './mockData'
+import { food, limits, meal, categories, projects } from './mock-data'
 import { Timestamp } from '@firebase/firestore';
 
 // CRUD
