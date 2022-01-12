@@ -1,3 +1,4 @@
+import { Timestamp } from '@firebase/firestore';
 import type { 
   Food, 
   FoodCategory, 
@@ -53,7 +54,7 @@ const meal: Meal = {
     { food: food[1], qty: 1 },
   ],
   limits: limits,
-  date: new Date(2001, 0, 13),
+  date: Timestamp.fromDate(new Date(2001, 0, 13)),
   order: 1,
 }
 

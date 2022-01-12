@@ -1,5 +1,5 @@
-import { Food, FoodCategory, Meal, MealBlueprint } from './models';
-import { FirestoreDataConverter, setDoc } from '@firebase/firestore'
+import type { Food, FoodCategory, Meal, MealBlueprint, SessionInfo } from './models';
+import type { FirestoreDataConverter, Timestamp } from '@firebase/firestore';
 
 import { initializeApp } from 'firebase/app';
 import {
@@ -7,6 +7,8 @@ import {
   collection,
   addDoc,
   getDocs,
+  getDoc,
+  setDoc,
   updateDoc,
   enableIndexedDbPersistence,
   query,
@@ -55,12 +57,17 @@ function createPlainConverter<T extends { id?: string }>(): FirestoreDataConvert
 }
 
 // Converters
+const sessionConverter = createPlainConverter<SessionInfo>();
 const categoryConverter = createPlainConverter<FoodCategory>();
 const foodRecordConverter = createPlainConverter<Food>();
 const mealBlueprintConverter = createPlainConverter<MealBlueprint>();
 const mealConverter = createPlainConverter<Meal>();
 
 // Collection references
+function sessionDocument(userID: string) {
+  return doc(db, 'mealPlanner', userID)
+    .withConverter(sessionConverter);
+}
 function categoryCollection(userID: string) {
   return collection(db, 'mealPlanner', userID, 'foodCategories')
     .withConverter(categoryConverter);
@@ -79,6 +86,15 @@ function blueprintCollection(userID: string, projectID: string) {
 }
 
 // CRUD
+// Saved session info
+async function saveSession(userID: string, session: SessionInfo) {
+  await updateDoc(sessionDocument(userID), session);
+}
+
+async function getSession(userID: string) {
+  return (await getDoc(sessionDocument(userID))).data();
+}
+
 // Food category
 async function getFoodCategories(userID: string) {
   const snapshot = await getDocs(categoryCollection(userID));
@@ -126,8 +142,8 @@ async function getMealBlueprints(userID: string, projectID: string) {
 async function getMeals(
   userID: string,
   projectID: string,
-  beginDate: Date,
-  endDate?: Date
+  beginDate: Timestamp,
+  endDate?: Timestamp
 ) {
   const snapshot = await getDocs(query(
     mealCollection(userID, projectID),
@@ -159,6 +175,8 @@ async function updateMeal(userID: string, projectID: string, meal: Meal) {
 }
 
 export {
+  saveSession,
+  getSession,
   getFoodCategories,
   addFoodCategory,
   getFoodList,
@@ -171,6 +189,8 @@ export {
 }
 
 const API = {
+  saveSession,
+  getSession,
   getFoodCategories,
   addFoodCategory,
   getFoodList,

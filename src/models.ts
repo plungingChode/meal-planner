@@ -1,3 +1,11 @@
+import type { Timestamp } from "@firebase/firestore"
+
+interface SessionInfo {
+  id?: string,
+  currentProject: string;
+  displayDate: Timestamp;
+}
+
 interface FoodCategory {
   id: string;
   name: string;
@@ -47,7 +55,7 @@ interface Meal {
   name: string;
   portions: FoodPortion[];
   limits: NutrientLimits;
-  date: Date;
+  date: Timestamp;
   order: number;
 }
 
@@ -64,6 +72,7 @@ interface MealPlan {
 }
 
 export type {
+  SessionInfo,
   FoodCategory,
   Food,
   FoodNutrients,

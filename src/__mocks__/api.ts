@@ -1,8 +1,20 @@
-import type { Food, FoodCategory, Meal, MealBlueprint, NutrientLimits } from '../models';
+import type { Food, FoodCategory, Meal, MealBlueprint, NutrientLimits, SessionInfo } from '../models';
 
 import { food, limits, meal, categories } from './mockData'
+import { Timestamp } from '@firebase/firestore';
 
 // CRUD
+// Saved session info
+async function saveSession(userID: string, session: SessionInfo) {
+}
+
+async function getSession(userID: string): Promise<SessionInfo> {
+  return {
+    currentProject: 'xxx',
+    displayDate: Timestamp.now(),
+  }
+}
+
 // Food category
 async function getFoodCategories(userID: string) {
   return categories;
@@ -59,6 +71,9 @@ export {
   updateMeal,
   getMealBlueprints,
   addMealBlueprint,
+  updateFood,
+  saveSession,
+  getSession
 }
 
 export default {
@@ -70,4 +85,7 @@ export default {
   updateMeal,
   getMealBlueprints,
   addMealBlueprint,
+  updateFood,
+  saveSession,
+  getSession
 };
