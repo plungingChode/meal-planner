@@ -14,7 +14,7 @@ describe('FoodList', () => {
     Object.defineProperty(HTMLElement.prototype, 'offsetWidth', { configurable: true, value: 500 });
   });
 
-  test('addPortion works correctly', () => {
+  test('food portion is added on button click', () => {
     const onAddAmountHovered = jest.fn((hovered: boolean) => { });
     const onAddPortionClicked = jest.fn((food: Food) => { });
     const onAddUnitClicked = jest.fn((food: Food) => { });
