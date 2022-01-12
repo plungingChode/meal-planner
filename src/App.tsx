@@ -1,13 +1,15 @@
-import type { FoodPortion, Food, Meal, MealBlueprint } from './models';
+import { FoodPortion, Food, Meal, MealBlueprint, FoodCategory } from './models';
 
 import React, { useEffect, useReducer, useState } from 'react';
 import './App.scss';
-import FoodList from './FoodListTable';
+import FoodList from './FoodList';
 import Menubar from './Menubar';
 import MealDisplay from './MealDisplay';
 
 import { pureInsert, pureDelete } from './pureutil';
 import API from './api';
+
+import { categories as _ctg } from './__mocks__/mockData';
 
 type AppState = {
   selectedMeal: string;
@@ -106,6 +108,8 @@ function reducer(state: AppState, action: AppAction): AppState {
 
       return {
         ...state,
+
+        // Select first meal by default
         selectedMeal: meals.length ? meals[0].id : '',
         meals: meals
       }
@@ -123,7 +127,8 @@ function reducer(state: AppState, action: AppAction): AppState {
 const USER_ID = 'some-user-id';
 
 function App() {
-  const [data, setData] = useState<Food[]>([]);
+  const [foods, setFoods] = useState<Food[]>([]);
+  const [categories, setCategories] = useState<FoodCategory[]>([]);
   const [state, dispatch] = useReducer(reducer, {
     selectedMeal: '',
     meals: [],
@@ -134,13 +139,16 @@ function App() {
   useEffect(
     () => {
       API.getFoodList(USER_ID)
-        .then(list => setData(list));
+        .then(list => setFoods(list));
 
       API.getMealBlueprints(USER_ID, 'test-project')
         .then(blueprints => dispatch({ type: 'setBlueprints', payload: blueprints }));
 
       API.getMeals(USER_ID, 'test-project', new Date(2001, 0, 12))
         .then(meals => dispatch({ type: 'setMeals', payload: meals }));
+      
+      API.getFoodCategories(USER_ID)
+        .then(categories => setCategories(categories));
     },
     []
   );
@@ -153,7 +161,8 @@ function App() {
       <div className='App-columns'>
         <div className='App-column' data-testid='foodlist-col'>
           <FoodList
-            data={data}
+            data={foods}
+            categories={categories}
             onAddPortionClicked={food => dispatch({ type: 'addPortion', payload: food })}
           />
         </div>

@@ -134,10 +134,6 @@ function MealTable(props: MealTableProps) {
     prepareRow
   } = tableInstance;
 
-  if (props.meal.id === 'reggeli-1') {
-    console.log('reggeli-1', props.meal.portions);
-  }
-
   // TODO link scrollY to other MealTables
   return (
     <div 
