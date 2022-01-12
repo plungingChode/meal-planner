@@ -206,4 +206,4 @@ function MealTable(props: MealTableProps) {
   )
 }
 
-export default MealTable;
+export default React.memo(MealTable);
