@@ -1,9 +1,19 @@
-import React from 'react'
+import React from 'react';
 
-function Menubar() {
+interface EditorMenuProps {
+  onSave: () => void;
+}
+
+function Menubar(props: EditorMenuProps) {
   return (
-    <div></div>
+    <>
+      <button onClick={props.onSave}>SV</button>
+      <button /*onClick={props.onCreateNewProject}*/>NP</button>
+      <button /*onClick={props.onOpenSettings}*/>ST</button>
+
+    </>
   )
 }
+
 
 export default Menubar;

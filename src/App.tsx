@@ -1,23 +1,42 @@
-import type { FoodPortion, Food, Meal, MealBlueprint, FoodCategory, FoodNutrients } from './models';
+import {
+  Food,
+  FoodCategory,
+  FoodPortion,
+  Meal,
+  MealBlueprint,
+  ProjectDefinition
+} from './models';
 
-import React, { useEffect, useReducer, useRef, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { Timestamp } from '@firebase/firestore';
 import { pureInsert, pureDelete } from './pureutil';
 import API from './api';
 
 import FoodList from './FoodList';
-import Menubar from './EditorMenu';
+import Menubar from './Menubar';
 import MealDisplay from './MealDisplay';
 
 import './App.scss';
 
 type AppState = {
+  currentProject: ProjectDefinition | null;
+  blueprints: MealBlueprint[];
+  meals: Meal[];
+  displayDate: Timestamp | null;
   selectedMeal: string;
+
+  // Rarely updated fields
+  foods: Food[];
+  categories: FoodCategory[];
+  projects: ProjectDefinition[];
+};
+
+interface SetProjectArgs {
+  currentProject: ProjectDefinition | null;
+  displayDate: Timestamp | null;
   meals: Meal[];
   blueprints: MealBlueprint[];
-  displayDate: Timestamp;
-  currentProject: string;
-};
+}
 
 type AppAction =
   | { type: 'initialize', payload: AppState }
@@ -27,7 +46,12 @@ type AppAction =
   | { type: 'addPortion', payload: Food }
   | { type: 'removePortion', food: FoodPortion, mealID: string }
   | { type: 'changeDisplayDate', newDate: Timestamp, meals: Meal[] }
+  | { type: 'setProject', payload: SetProjectArgs }
+  | { type: 'setFoodList', payload: Food[] }
+  | { type: 'setCategoryList', payload: FoodCategory[] }
+  | { type: 'setProjectList', payload: ProjectDefinition[] }
 
+// #region Reducer helper functions
 /**
  * Add a portion of `food` to the currently selected meal.
  * 
@@ -92,6 +116,14 @@ function removePortion(state: AppState, mealID: string, portion: FoodPortion): A
   }
 }
 
+/** Returns the first meal's ID or an empty string if no meals are present */
+function firstMealID(meals: Meal[]) {
+  return meals && meals.length
+    ? meals[0].id
+    : '';
+}
+// #endregion
+
 function reducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
     case 'initialize':
@@ -102,30 +134,50 @@ function reducer(state: AppState, action: AppAction): AppState {
         selectedMeal: action.payload
       }
     case 'setMeals':
-      const meals = action.payload;
-
       return {
         ...state,
 
         // Select first meal by default
-        selectedMeal: meals.length ? meals[0].id : '',
-        meals: meals
+        selectedMeal: firstMealID(action.payload),
+        meals: action.payload,
       }
     case 'setBlueprints':
       return {
         ...state,
         blueprints: action.payload
       }
-    case 'changeDisplayDate':
-      return {
-        ...state,
-        displayDate: action.newDate,
-        meals: action.meals
-      }
     case 'addPortion':
       return addPortion(state, action.payload);
     case 'removePortion':
       return removePortion(state, action.mealID, action.food);
+    case 'changeDisplayDate':
+      return {
+        ...state,
+        displayDate: action.newDate,
+        meals: action.meals,
+        selectedMeal: firstMealID(action.meals),
+      }
+    case 'setProject':
+      return {
+        ...state,
+        ...action.payload,
+        selectedMeal: firstMealID(action.payload.meals),
+      }
+    case 'setFoodList':
+      return {
+        ...state,
+        foods: action.payload
+      }
+    case 'setCategoryList':
+      return {
+        ...state,
+        categories: action.payload
+      }
+    case 'setProjectList':
+      return {
+        ...state,
+        projects: action.payload
+      }
     default:
       throw new Error('Unknown action');
   }
@@ -138,75 +190,111 @@ function saveMeals(meals: Meal[]) {
 }
 
 function App() {
-  const [foods, setFoods] = useState<Food[]>([]);
-  const [categories, setCategories] = useState<FoodCategory[]>([]);
   const [state, dispatch] = useReducer(reducer, {
-    selectedMeal: '',
-    meals: [],
+    currentProject: null,
     blueprints: [],
+    meals: [],
     displayDate: Timestamp.now(),
-    currentProject: '',
+    selectedMeal: '',
+
+    foods: [],
+    categories: [],
+    projects: [],
   });
 
   // Load initial data from server
-  useEffect(
-    () => {
-      API.getSession(USER_ID).then(async (session) => {
-        const { currentProject, displayDate } = session!;
+  useEffect(() => {
+    (async () => {
+      // Start loading foodlist & categories
+      const getFoodList = API.getFoodList(USER_ID);
+      const getCategories = API.getFoodCategories(USER_ID);
 
-        const [blueprints, meals] = await Promise.all([
-          API.getMealBlueprints(USER_ID, currentProject),
-          API.getMeals(USER_ID, currentProject, displayDate)
-        ]);
+      const [session, projects] = await Promise.all([
+        API.getSession(USER_ID),
+        API.getProjects(USER_ID),
+      ]);
 
-        dispatch({
-          type: 'initialize',
-          payload: {
-            blueprints,
-            meals,
-            currentProject,
-            displayDate,
-            selectedMeal: meals.length ? meals[0].id : ''
-          }
-        });
+      if (!projects || !projects.length) {
+        // TODO handle empty project list
+        return;
+      }
+
+      if (!session) {
+        // TODO handle missing session
+        return;
+      }
+
+      // Load last edited project
+      const { currentProject: lastProjectID, displayDate } = session;
+      const results = await Promise.all([
+        API.getMealBlueprints(USER_ID, lastProjectID),
+        API.getMeals(USER_ID, lastProjectID, displayDate),
+        getFoodList,
+        getCategories,
+      ]);
+      const [blueprints, meals, foods, categories] = results;
+      const currentProject = projects.find(p => p.id === lastProjectID) || null;
+
+      dispatch({
+        type: 'initialize',
+        payload: {
+          currentProject,
+          blueprints,
+          meals,
+          displayDate,
+          selectedMeal: firstMealID(meals),
+
+          foods,
+          categories,
+          projects,
+        }
       });
+    })();
+  }, []);
 
-      API.getFoodList(USER_ID)
-        .then(list => setFoods(list));
-
-      API.getFoodCategories(USER_ID)
-        .then(categories => setCategories(categories));
-    },
-    []
+  // 
+  const handleAddPortion = (f: Food) => (
+    dispatch({ type: 'addPortion', payload: f })
   );
-
+  const handleRemovePortion = (food: FoodPortion, mealID: string) => (
+    dispatch({ type: 'removePortion', food, mealID })
+  );
+  const handleMealSelection = (id: string) => (
+    dispatch({ type: 'setSelectedMeal', payload: id })
+  );
   const handleDisplayDateChange = (newDate: Timestamp) => {
-    API.getMeals(USER_ID, state.currentProject, newDate)
+    if (!state.currentProject) {
+      return;
+    }
+    API.getMeals(USER_ID, state.currentProject.id!, newDate)
       .then(meals => dispatch({ type: 'changeDisplayDate', newDate, meals }));
   }
+
+  // Menu actions
+  const handleSaveAction = () => saveMeals(state.meals);
 
   return (
     <div className='App'>
       <div className='App-menubar'>
         <Menubar
-          onSave={() => saveMeals(state.meals)}
+          onSave={handleSaveAction}
         />
       </div>
       <div className='App-columns'>
         <div className='App-column' data-testid='foodlist-col'>
           <FoodList
-            data={foods}
-            categories={categories}
-            onAddPortionClicked={food => dispatch({ type: 'addPortion', payload: food })}
+            data={state.foods}
+            categories={state.categories}
+            onAddPortionClicked={handleAddPortion}
           />
         </div>
         <div className='App-column App-mealList' data-testid='meals-col'>
           <MealDisplay
             meals={state.meals}
             selectedMealTable={state.selectedMeal}
-            displayDate={state.displayDate}
-            onSelectionChanged={id => dispatch({ type: 'setSelectedMeal', payload: id })}
-            onPortionRemoved={(food, mealID) => dispatch({ type: 'removePortion', food, mealID })}
+            displayDate={state.displayDate!}
+            onSelectionChanged={handleMealSelection}
+            onPortionRemoved={handleRemovePortion}
             onDisplayDateChanged={handleDisplayDateChange}
           />
         </div>
