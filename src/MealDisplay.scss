@@ -1,0 +1,12 @@
+$font-size: 13px;
+
+.MealDisplay-meals {
+  overflow-y: scroll;
+  padding: 1rem 0;
+  height: calc(100vh - 60px);
+  
+  @media screen and (max-width: 1024px) {
+    margin-top: 1rem;
+    height: calc(50vh - (1*$font-size + 60px + 2px));
+  }
+}

@@ -1,7 +1,12 @@
-import type { FoodPortion, Meal } from './models';
+import type { FoodNutrients, FoodPortion, Meal, NutrientLimits } from './models';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import MealTable from './MealTable';
+import MealTableFooterCell from './MealTableFooterCell';
+
+import MealDisplayFooter from './MealDisplayFooter';
+
+import './MealDisplay.scss';
 
 interface MealDisplayProps {
   meals: Meal[];
@@ -11,20 +16,25 @@ interface MealDisplayProps {
 }
 
 function MealDisplay(props: MealDisplayProps) {
-  const {meals} = props;
+  const { meals } = props;
 
   return (
     <>
-      {meals.map(meal => (
-        <MealTable
-          key={meal.id}
-          meal={meal}
-          onPortionRemoved={props.onPortionRemoved}
-          onQuantityChanged={() => { }}
-          onSelect={props.onSelectionChanged}
-          selected={meal.id === props.selectedMealTable}
-        />
-      ))}
+      <div className='MealDisplay-meals'>
+        {meals.map(meal => (
+          <MealTable
+            key={meal.id}
+            meal={meal}
+            onPortionRemoved={props.onPortionRemoved}
+            onQuantityChanged={() => { }}
+            onSelect={props.onSelectionChanged}
+            selected={meal.id === props.selectedMealTable}
+          />
+        ))}
+      </div>
+      <MealDisplayFooter
+        meals={meals}
+      />
     </>
   );
 }

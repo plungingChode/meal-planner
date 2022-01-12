@@ -33,10 +33,6 @@
     border-right: 1px solid black;
   }
 
-  &-mealList {
-    padding: 0.5rem;
-  }
-
   @media screen and (max-width: 1024px) {
     &-columns {
       // display: block;
@@ -45,8 +41,8 @@
 
     &-column {
       width: 100%;
-      min-height: calc(50vh - 0.5rem);
-      max-height: unset;
+      min-height: 50vh;
+      max-height: 50vh;
     }
   }
 }

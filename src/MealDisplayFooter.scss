@@ -1,0 +1,12 @@
+@use './MealTable.scss' as MealTable;
+
+.MealDisplay-footer {
+  position: sticky;
+  bottom: 0;
+  
+  width: MealTable.$table-width;
+  margin: MealTable.$table-margin;
+
+  overflow-y: hidden;
+  pointer-events: none;
+}

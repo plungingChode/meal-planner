@@ -3,11 +3,12 @@
 $header-row-height: 30px;
 
 .FoodList-table {
-  max-height: 100vh;
+  // TODO calculate max-height considering sibling components
+  max-height: 90vh;
   overflow-y: hidden !important;
 
   @media screen and (max-width: 1024px) {
-    max-height: 50vh;
+    max-height: 40vh;
   }
 }
 
