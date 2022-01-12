@@ -163,8 +163,7 @@ function FoodListFilter(props: FoodListFilterProps) {
 
     if (checkValues.length === categories.length &&
       checkValues.every(v => v === true)) {
-      // Only uncheck all when we're sure all of them
-      // are selected 
+      // Only uncheck all when we're sure all of them are selected
       setChecked({});
     }
     else {
@@ -177,17 +176,15 @@ function FoodListFilter(props: FoodListFilterProps) {
 
   // Notify of filter update (after initial setup)
   const firstRender = useRef(true);
-  const oldChecked = useRef({} as Record<string, boolean>)
   useEffect(
-    () => { 
+    () => {
       if (firstRender.current) {
-        // oldChecked.current = checked;
         firstRender.current = false;
         return;
       }
 
-      // console.log(oldChecked.current === checked);
-      // console.log(textFilter);
+      // `checked` may be accessed directly, since it always contains
+      // all the relevant keys (and therefore is not modified)
       onFilterChanged(f => textFilter(f) && checked[f.category])
     },
     [textFilter, checked, onFilterChanged]

@@ -170,23 +170,26 @@ describe('FoodList filter', () => {
     await setFilterText('aaaa');
     await setFilterText('');
 
-    let filterFn = lastCallParam(mockFilterChanged);
-    expect(food.filter(filterFn)).toEqual(food);
+    let actualFilter = lastCallParam(mockFilterChanged);
+    let expectedFilter = (f: Food) => true;
+    expect(food.filter(actualFilter)).toEqual(food.filter(expectedFilter));
 
     // TODO make language-independent
     // Typing nutrient constraint key phrases gets parsed as filters
     await setFilterText('fe > 1');
-    filterFn = lastCallParam(mockFilterChanged);
-    expect(food.filter(filterFn)).toEqual(food.filter(f => f.protein > 1));
+    actualFilter = lastCallParam(mockFilterChanged);
+    expectedFilter = f => f.protein > 1;
+    expect(food.filter(actualFilter)).toEqual(food.filter(expectedFilter));
 
     await setFilterText('a');
-    filterFn = lastCallParam(mockFilterChanged);
-    let expected = food.filter(f => f.name.toLowerCase().includes('a'));
-    expect(food.filter(filterFn)).toEqual(expected);
+    actualFilter = lastCallParam(mockFilterChanged);
+    expectedFilter = f => f.name.toLowerCase().includes('a');
+    expect(food.filter(actualFilter)).toEqual(food.filter(expectedFilter));
     
     await setFilterText('zs <= 1');
-    filterFn = lastCallParam(mockFilterChanged);
-    expect(food.filter(filterFn)).toEqual(food.filter(f => f.fat <= 1));
+    actualFilter = lastCallParam(mockFilterChanged);
+    expectedFilter = f => f.fat <= 1;
+    expect(food.filter(actualFilter)).toEqual(food.filter(expectedFilter));
 
     // TODO test ALL cases??
   });
