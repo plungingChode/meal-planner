@@ -1,9 +1,14 @@
 import type { Timestamp } from "@firebase/firestore"
 
 interface SessionInfo {
-  id?: string,
+  id?: string;
   currentProject: string;
   displayDate: Timestamp;
+}
+
+interface ProjectDefinition {
+  id?: string;
+  name: string;
 }
 
 interface FoodCategory {
@@ -73,6 +78,7 @@ interface MealPlan {
 
 export type {
   SessionInfo,
+  ProjectDefinition,
   FoodCategory,
   Food,
   FoodNutrients,

@@ -1,4 +1,4 @@
-import type { Food, FoodCategory, Meal, MealBlueprint, SessionInfo } from './models';
+import type { Food, FoodCategory, Meal, MealBlueprint, SessionInfo, ProjectDefinition } from './models';
 import type { FirestoreDataConverter, Timestamp } from '@firebase/firestore';
 
 import { initializeApp } from 'firebase/app';
@@ -58,6 +58,7 @@ function createPlainConverter<T extends { id?: string }>(): FirestoreDataConvert
 
 // Converters
 const sessionConverter = createPlainConverter<SessionInfo>();
+const projectConverter = createPlainConverter<ProjectDefinition>();
 const categoryConverter = createPlainConverter<FoodCategory>();
 const foodRecordConverter = createPlainConverter<Food>();
 const mealBlueprintConverter = createPlainConverter<MealBlueprint>();
@@ -67,6 +68,10 @@ const mealConverter = createPlainConverter<Meal>();
 function sessionDocument(userID: string) {
   return doc(db, 'mealPlanner', userID)
     .withConverter(sessionConverter);
+}
+function projectCollection(userID: string) {
+  return collection(db, 'mealPlanner', userID, 'projects')
+    .withConverter(projectConverter);
 }
 function categoryCollection(userID: string) {
   return collection(db, 'mealPlanner', userID, 'foodCategories')
@@ -93,6 +98,38 @@ async function saveSession(userID: string, session: SessionInfo) {
 
 async function getSession(userID: string) {
   return (await getDoc(sessionDocument(userID))).data();
+}
+
+// Project
+async function getProjects(userID: string) {
+  const projectDocs = await getDocs(projectCollection(userID));
+  const projects = projectDocs.docs.map(doc => doc.data());
+  return projects;
+}
+
+interface ProjectInit {
+  project: ProjectDefinition;
+  blueprints: MealBlueprint[];
+}
+
+async function addProject(userID: string, args: ProjectInit): Promise<ProjectInit> {
+  const projects = projectCollection(userID);
+
+  // Create project entry
+  const newProject = await addDoc(projects, { name: args.project.name });
+  const projectWithID = { ...args.project, id: newProject.id }
+
+  // Add blueprints
+  const blueprintRequests = args.blueprints
+    .map(bp => addDoc(collection(newProject, 'blueprints'), bp))
+  const blueprintsWithID = (await Promise.all(blueprintRequests))
+    .map((doc, idx) => ({ ...args.blueprints[idx], id: doc.id }));
+
+  // Return original args, updated with document ID
+  return {
+    project: projectWithID,
+    blueprints: blueprintsWithID,
+  }
 }
 
 // Food category
@@ -177,6 +214,8 @@ async function updateMeal(userID: string, projectID: string, meal: Meal) {
 export {
   saveSession,
   getSession,
+  getProjects,
+  addProject,
   getFoodCategories,
   addFoodCategory,
   getFoodList,
@@ -191,6 +230,7 @@ export {
 const API = {
   saveSession,
   getSession,
+  getProjects,
   getFoodCategories,
   addFoodCategory,
   getFoodList,

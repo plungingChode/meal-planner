@@ -4,8 +4,16 @@ import type {
   FoodCategory, 
   Meal, 
   MealBlueprint, 
-  NutrientLimits 
+  NutrientLimits, 
+  ProjectDefinition
 } from '../models';
+
+const projects: ProjectDefinition[] = [
+  {
+    id: 'mock-project',
+    name: 'Mock project'
+  }
+];
 
 const categories: FoodCategory[] = [
   { id: "A", name: "A" }, 
@@ -63,4 +71,5 @@ export {
   food,
   limits,
   meal,
+  projects,
 }

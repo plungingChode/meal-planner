@@ -1,6 +1,14 @@
-import type { Food, FoodCategory, Meal, MealBlueprint, NutrientLimits, SessionInfo } from '../models';
+import type {
+  Food,
+  FoodCategory,
+  Meal,
+  MealBlueprint,
+  NutrientLimits,
+  ProjectDefinition,
+  SessionInfo
+} from '../models';
 
-import { food, limits, meal, categories } from './mockData'
+import { food, limits, meal, categories, projects } from './mockData'
 import { Timestamp } from '@firebase/firestore';
 
 // CRUD
@@ -12,6 +20,24 @@ async function getSession(userID: string): Promise<SessionInfo> {
   return {
     currentProject: 'xxx',
     displayDate: Timestamp.now(),
+  }
+}
+
+// Project
+async function getProjects(userID: string) {
+  return projects;
+}
+
+interface ProjectInit {
+  project: ProjectDefinition;
+  blueprints: MealBlueprint[];
+}
+
+async function addProject(userID: string, args: ProjectInit): Promise<ProjectInit> {
+  // Return original args, updated with document ID
+  return {
+    project: { ...args.project, id: args.project.name },
+    blueprints: args.blueprints.map((bp, idx) => ({ ...bp, id: bp.name + idx })),
   }
 }
 
@@ -63,29 +89,34 @@ async function updateMeal(userID: string, projectID: string, meal: Meal) {
 }
 
 export {
+  saveSession,
+  getSession,
+  getProjects,
+  addProject,
   getFoodCategories,
   addFoodCategory,
   getFoodList,
+  updateFood,
   getMeals,
   addMeal,
   updateMeal,
   getMealBlueprints,
   addMealBlueprint,
-  updateFood,
-  saveSession,
-  getSession
 }
 
-export default {
+const API = {
+  saveSession,
+  getSession,
+  getProjects,
   getFoodCategories,
   addFoodCategory,
   getFoodList,
+  updateFood,
   getMeals,
   addMeal,
   updateMeal,
   getMealBlueprints,
   addMealBlueprint,
-  updateFood,
-  saveSession,
-  getSession
-};
+}
+
+export default API;
