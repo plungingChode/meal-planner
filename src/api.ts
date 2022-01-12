@@ -1,5 +1,5 @@
-import type { Food, Meal, MealBlueprint } from './models';
-import type { FirestoreDataConverter } from '@firebase/firestore'
+import { Food, FoodCategory, Meal, MealBlueprint } from './models';
+import { FirestoreDataConverter, setDoc } from '@firebase/firestore'
 
 import { initializeApp } from 'firebase/app';
 import {
@@ -33,7 +33,7 @@ const db = getFirestore(app);
 
 // TODO handle errors
 enableIndexedDbPersistence(db)
-  .catch(reason => {})
+  .catch(reason => { })
 
 /**
  * Create a converter that transforms Firestore documents into models by
@@ -55,11 +55,16 @@ function createPlainConverter<T extends { id?: string }>(): FirestoreDataConvert
 }
 
 // Converters
+const categoryConverter = createPlainConverter<FoodCategory>();
 const foodRecordConverter = createPlainConverter<Food>();
 const mealBlueprintConverter = createPlainConverter<MealBlueprint>();
 const mealConverter = createPlainConverter<Meal>();
 
 // Collection references
+function categoryCollection(userID: string) {
+  return collection(db, 'mealPlanner', userID, 'foodCategories')
+    .withConverter(categoryConverter);
+}
 function foodCollection(userID: string) {
   return collection(db, 'mealPlanner', userID, 'foodList')
     .withConverter(foodRecordConverter);
@@ -74,6 +79,19 @@ function blueprintCollection(userID: string, projectID: string) {
 }
 
 // CRUD
+// Food category
+async function getFoodCategories(userID: string) {
+  const snapshot = await getDocs(categoryCollection(userID));
+  const categories = snapshot.docs.map(doc => doc.data());
+
+  return categories;
+}
+
+async function addFoodCategory(userID: string, category: FoodCategory) {
+  await setDoc(doc(categoryCollection(userID), category.id), category);
+  return category;
+}
+
 // Food list
 async function getFoodList(userID: string) {
   const snapshot = await getDocs(foodCollection(userID));
@@ -82,17 +100,18 @@ async function getFoodList(userID: string) {
   return foodList;
 }
 
+async function updateFood(userID: string, food: Food) {
+  const foodRef = doc(foodCollection(userID), food.id);
+  await updateDoc(foodRef, food);
+}
+
 // Blueprints
 async function addMealBlueprint(
   userID: string,
   projectID: string,
   blueprint: MealBlueprint
 ) {
-  const blueprintCollection =
-    collection(db, 'mealPlanner', userID, 'projects', projectID, 'blueprints')
-      .withConverter(mealBlueprintConverter);
-
-  const result = await addDoc(blueprintCollection, blueprint);
+  const result = await addDoc(blueprintCollection(userID, projectID), blueprint);
   return { ...blueprint, id: result.id }
 }
 
@@ -125,8 +144,6 @@ async function getMeals(
       : nsA - nsB;
   });
 
-  console.log(meals);
-
   return meals;
 }
 
@@ -142,7 +159,10 @@ async function updateMeal(userID: string, projectID: string, meal: Meal) {
 }
 
 export {
+  getFoodCategories,
+  addFoodCategory,
   getFoodList,
+  updateFood,
   getMeals,
   addMeal,
   updateMeal,
@@ -151,7 +171,10 @@ export {
 }
 
 const API = {
+  getFoodCategories,
+  addFoodCategory,
   getFoodList,
+  updateFood,
   getMeals,
   addMeal,
   updateMeal,

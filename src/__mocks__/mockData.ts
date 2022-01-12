@@ -1,9 +1,20 @@
-import type { Food, Meal, MealBlueprint, NutrientLimits } from '../models';
+import type { 
+  Food, 
+  FoodCategory, 
+  Meal, 
+  MealBlueprint, 
+  NutrientLimits 
+} from '../models';
+
+const categories: FoodCategory[] = [
+  { id: "A", name: "A" }, 
+  { id: "B", name: "B" }
+];
 
 const food: Food[] = [
   {
     name: "A",
-    category: 1,
+    category: "A",
     refAmount: 1,
     refUnit: "g",
     portionMultiplier: 1.0,
@@ -15,7 +26,7 @@ const food: Food[] = [
   },
   {
     name: "B",
-    category: 2,
+    category: "B",
     refAmount: 2,
     refUnit: "g",
     portionMultiplier: 0.5,
@@ -47,6 +58,7 @@ const meal: Meal = {
 }
 
 export {
+  categories,
   food,
   limits,
   meal,

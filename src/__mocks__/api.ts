@@ -1,11 +1,23 @@
-import type { Food, Meal, MealBlueprint, NutrientLimits } from '../models';
+import type { Food, FoodCategory, Meal, MealBlueprint, NutrientLimits } from '../models';
 
-import { food, limits, meal } from './mockData'
+import { food, limits, meal, categories } from './mockData'
 
 // CRUD
+// Food category
+async function getFoodCategories(userID: string) {
+  return categories;
+}
+
+async function addFoodCategory(userID: string, category: FoodCategory) {
+  return category;
+}
+
 // Food list
 async function getFoodList(userID: string) {
   return food;
+}
+
+async function updateFood(userID: string, food: Food) {
 }
 
 // Blueprints
@@ -39,6 +51,8 @@ async function updateMeal(userID: string, projectID: string, meal: Meal) {
 }
 
 export {
+  getFoodCategories,
+  addFoodCategory,
   getFoodList,
   getMeals,
   addMeal,
@@ -48,6 +62,8 @@ export {
 }
 
 export default {
+  getFoodCategories,
+  addFoodCategory,
   getFoodList,
   getMeals,
   addMeal,

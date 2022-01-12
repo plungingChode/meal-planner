@@ -1,7 +1,12 @@
+interface FoodCategory {
+  id: string;
+  name: string;
+}
+
 interface Food {
   id?: string;
   name: string;
-  category: number;
+  category: string;
 
   refAmount: number;
   refUnit: string;
@@ -59,6 +64,7 @@ interface MealPlan {
 }
 
 export type {
+  FoodCategory,
   Food,
   FoodNutrients,
   FoodPortion,
