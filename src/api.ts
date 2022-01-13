@@ -170,7 +170,7 @@ async function addMealBlueprint(
 
 async function getMealBlueprints(userID: string, projectID: string) {
   const snapshot = await getDocs(blueprintCollection(userID, projectID));
-  const blueprints = snapshot.docs.map(doc => doc.data());
+  const blueprints = snapshot.docs.map(doc => doc.data()).sort((a, b) => a.order - b.order);
 
   return blueprints;
 }
