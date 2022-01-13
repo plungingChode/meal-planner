@@ -33,7 +33,7 @@ function extractLimits(limits: NutrientLimits, n: FoodNutrients): ExtractedLimit
     minStr: '?',
     max: Number.POSITIVE_INFINITY,
     maxStr: '?',
-  }
+  };
   
   if (!limits[n]) {
     return rv;
@@ -79,11 +79,11 @@ function MealTableFooterCell(props: MealTableFooterCellProps) {
         {displayLimits.minStr}
       </span>
     </>
-  )
+  );
 }
 
 export default MealTableFooterCell;
 export {
   calculateNutrientSum,
   extractLimits
-}
+};

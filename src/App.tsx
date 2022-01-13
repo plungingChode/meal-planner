@@ -67,7 +67,7 @@ function addPortion(state: AppState, food: Food): AppState {
   const portion = {
     food: food,
     qty: 1
-  }
+  };
 
   const mealIdx = state.meals.findIndex(m => m.id === state.selectedMeal);
   const oldMeal = state.meals[mealIdx];
@@ -82,12 +82,12 @@ function addPortion(state: AppState, food: Food): AppState {
   const newMeal = {
     ...oldMeal,
     portions: pureInsert(oldPortions, portion, portionIdx)
-  }
+  };
 
   return {
     ...state,
     meals: pureInsert(state.meals, newMeal, mealIdx)
-  }
+  };
 }
 
 /**
@@ -113,7 +113,7 @@ function removePortion(state: AppState, mealID: string, portion: FoodPortion): A
   return {
     ...state,
     meals: pureInsert(state.meals, newMeal, mealIdx)
-  }
+  };
 }
 
 /** Returns the first meal's ID or an empty string if no meals are present */
@@ -132,7 +132,7 @@ function reducer(state: AppState, action: AppAction): AppState {
       return {
         ...state,
         selectedMeal: action.payload
-      }
+      };
     case 'setMeals':
       return {
         ...state,
@@ -140,12 +140,12 @@ function reducer(state: AppState, action: AppAction): AppState {
         // Select first meal by default
         selectedMeal: firstMealID(action.payload),
         meals: action.payload,
-      }
+      };
     case 'setBlueprints':
       return {
         ...state,
         blueprints: action.payload
-      }
+      };
     case 'addPortion':
       return addPortion(state, action.payload);
     case 'removePortion':
@@ -156,28 +156,28 @@ function reducer(state: AppState, action: AppAction): AppState {
         displayDate: action.newDate,
         meals: action.meals,
         selectedMeal: firstMealID(action.meals),
-      }
+      };
     case 'setProject':
       return {
         ...state,
         ...action.payload,
         selectedMeal: firstMealID(action.payload.meals),
-      }
+      };
     case 'setFoodList':
       return {
         ...state,
         foods: action.payload
-      }
+      };
     case 'setCategoryList':
       return {
         ...state,
         categories: action.payload
-      }
+      };
     case 'setProjectList':
       return {
         ...state,
         projects: action.payload
-      }
+      };
     default:
       throw new Error('Unknown action');
   }
@@ -268,7 +268,7 @@ function App() {
     }
     API.getMeals(USER_ID, state.currentProject.id!, newDate)
       .then(meals => dispatch({ type: 'changeDisplayDate', newDate, meals }));
-  }
+  };
 
   // Menu actions
   const handleSaveAction = () => saveMeals(state.meals);
@@ -304,4 +304,4 @@ function App() {
 }
 
 export default App;
-export type { AppState }
+export type { AppState };

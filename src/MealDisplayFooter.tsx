@@ -47,12 +47,12 @@ function combineMeals(meals: Meal[]): CombinedMeal {
   return {
     portions: portionSum,
     limits: limitSum
-  }
+  };
 }
 
 function MealDisplayFooter(props: MealDisplayFooterProps) {
   const { meals } = props;
-  const { width: scrollbarWidth } = useScrollbarSize() 
+  const { width: scrollbarWidth } = useScrollbarSize(); 
   const [combinedMeal, setCombinedMeal] = useState(combineMeals(meals));
 
   useEffect(
@@ -82,7 +82,7 @@ function MealDisplayFooter(props: MealDisplayFooterProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default MealDisplayFooter;

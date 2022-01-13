@@ -37,7 +37,7 @@ function MealDisplay(props: MealDisplayProps) {
       dateInput.current!.value = offsetDate.toISOString().substring(0, 10);
     },
     [displayDate]
-  )
+  );
 
   const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
     const date = e.target.valueAsDate;
@@ -47,7 +47,7 @@ function MealDisplay(props: MealDisplayProps) {
     // TODO this is probably not a good idea
     date.setHours(0);
     onDisplayDateChanged(Timestamp.fromMillis(date.getTime()));
-  }
+  };
 
   return (
     <>

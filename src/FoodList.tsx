@@ -24,7 +24,7 @@ function FoodList(props: FoodListProps) {
   
   const handleFilterChanged = useCallback(
     (filterFn: (fs: Food) => boolean) => { 
-      setFilteredData(props.data.filter(filterFn))
+      setFilteredData(props.data.filter(filterFn));
     },
     [props.data]
   );
@@ -43,7 +43,7 @@ function FoodList(props: FoodListProps) {
         onAddUnitClicked={props.onAddUnitClicked}
       />
     </>
-  )
+  );
 }
 
 export default FoodList;

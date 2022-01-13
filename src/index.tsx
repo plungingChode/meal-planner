@@ -1,12 +1,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
-import App from './App';
+// import App from './App';
 import reportWebVitals from './reportWebVitals';
+
+import ProjectConfig from './dialogs/ProjectConfig';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ProjectConfig 
+      existingProjects={[]}
+      defaultValues={{
+        name: 'hyuck',
+        blueprints: [
+          {
+            name: 'Reggeli',
+            limits: {
+              carbohydrates: { max: 100 },
+              fat: { max: 100 },
+              energy: { max: 100 },
+              protein: { max: 100 },
+            },
+            order: 0
+          }
+        ]
+      }}
+    />
   </React.StrictMode>,
   document.getElementById('root')
 );

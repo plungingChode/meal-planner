@@ -7,7 +7,7 @@
  * @param idx The position to insert at.
  * @returns A new array, with the element inserted.
  */
- function pureInsert<T>(arr: T[], el: T, idx: number = -1) {
+function pureInsert<T>(arr: T[], el: T, idx: number = -1) {
   return idx < 0
     ? [...arr, el]
     : [...arr.slice(0, idx), el, ...arr.slice(idx + 1)];
@@ -30,4 +30,4 @@ function pureDelete<T>(arr: T[], idx: number) {
 export { 
   pureInsert,
   pureDelete
-}
+};

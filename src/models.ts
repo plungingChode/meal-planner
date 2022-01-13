@@ -1,4 +1,4 @@
-import type { Timestamp } from "@firebase/firestore"
+import type { Timestamp } from '@firebase/firestore';
 
 interface SessionInfo {
   id?: string;
@@ -88,4 +88,4 @@ export type {
   Meal,
   MealBlueprint,
   MealPlan
-}
+};

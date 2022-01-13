@@ -4,10 +4,10 @@ import React from 'react';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import { Simulate } from 'react-dom/test-utils';
 import { food, limits, meal } from './__mocks__/mock-data';
-
-jest.mock('./api');
 import API from './api';
 import App from './App';
+
+jest.mock('./api');
 
 describe('App', () => {
   // Set screen width & height for react-virtualized-auto-sizer
@@ -29,7 +29,7 @@ describe('App', () => {
       const actualNames = foodListRows.map(row => within(row).getAllByRole('cell')[1].textContent);
       const expectedNames = food.map(f => f.name);
       expect(actualNames).toEqual(expectedNames);
-    })
+    });
   });
 
   test('loads and displays initial meal list', async () => {

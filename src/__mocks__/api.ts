@@ -8,7 +8,7 @@ import type {
   SessionInfo
 } from '../models';
 
-import { food, limits, meal, categories, projects } from './mock-data'
+import { food, limits, meal, categories, projects } from './mock-data';
 import { Timestamp } from '@firebase/firestore';
 
 // CRUD
@@ -20,7 +20,7 @@ async function getSession(userID: string): Promise<SessionInfo> {
   return {
     currentProject: 'xxx',
     displayDate: Timestamp.now(),
-  }
+  };
 }
 
 // Project
@@ -38,7 +38,7 @@ async function addProject(userID: string, args: ProjectInit): Promise<ProjectIni
   return {
     project: { ...args.project, id: args.project.name },
     blueprints: args.blueprints.map((bp, idx) => ({ ...bp, id: bp.name + idx })),
-  }
+  };
 }
 
 // Food category
@@ -64,7 +64,7 @@ async function addMealBlueprint(
   projectID: string,
   blueprint: MealBlueprint
 ) {
-  return { ...blueprint, id: 'xxx' }
+  return { ...blueprint, id: 'xxx' };
 }
 
 async function getMealBlueprints(userID: string, projectID: string) {
@@ -82,7 +82,7 @@ async function getMeals(
 }
 
 async function addMeal(userID: string, projectID: string, meal: Meal) {
-  return { ...meal, id: 'xxx' }
+  return { ...meal, id: 'xxx' };
 }
 
 async function updateMeal(userID: string, projectID: string, meal: Meal) {
@@ -102,7 +102,7 @@ export {
   updateMeal,
   getMealBlueprints,
   addMealBlueprint,
-}
+};
 
 const API = {
   saveSession,
@@ -117,6 +117,6 @@ const API = {
   updateMeal,
   getMealBlueprints,
   addMealBlueprint,
-}
+};
 
 export default API;

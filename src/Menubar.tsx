@@ -12,7 +12,7 @@ function Menubar(props: EditorMenuProps) {
       <button /*onClick={props.onOpenSettings}*/>ST</button>
 
     </>
-  )
+  );
 }
 
 

@@ -16,34 +16,34 @@ const projects: ProjectDefinition[] = [
 ];
 
 const categories: FoodCategory[] = [
-  { id: "A", name: "A" }, 
-  { id: "B", name: "B" }
+  { id: 'A', name: 'A' }, 
+  { id: 'B', name: 'B' }
 ];
 
 const food: Food[] = [
   {
-    name: "A",
-    category: "A",
+    name: 'A',
+    category: 'A',
     refAmount: 1,
-    refUnit: "g",
+    refUnit: 'g',
     portionMultiplier: 1.0,
     energy: 1,
     carbohydrates: 1,
     protein: 1,
     fat: 1,
-    comment: "-"
+    comment: '-'
   },
   {
-    name: "B",
-    category: "B",
+    name: 'B',
+    category: 'B',
     refAmount: 2,
-    refUnit: "g",
+    refUnit: 'g',
     portionMultiplier: 0.5,
     energy: 2,
     carbohydrates: 2,
     protein: 2,
     fat: 2,
-    comment: "-"
+    comment: '-'
   }
 ];
 
@@ -52,7 +52,7 @@ const limits: NutrientLimits = {
   carbohydrates: { min: 1, max: 2 },
   protein: { min: 99, max: Number.POSITIVE_INFINITY },
   fat: { max: 0 },
-}
+};
 
 const meal: Meal = {
   id: 'meal-1',
@@ -64,7 +64,7 @@ const meal: Meal = {
   limits: limits,
   date: Timestamp.fromDate(new Date(2001, 0, 13)),
   order: 1,
-}
+};
 
 export {
   categories,
@@ -72,4 +72,4 @@ export {
   limits,
   meal,
   projects,
-}
+};

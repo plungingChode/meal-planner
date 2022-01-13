@@ -6,7 +6,7 @@ import { useTable } from 'react-table';
 import FooterCell from './MealTableFooterCell';
 import cx from 'classnames';
 
-import './MealTable.scss'
+import './MealTable.scss';
 
 
 interface MealTableProps {
@@ -186,7 +186,7 @@ function MealTable(props: MealTableProps) {
                     </div>
                   ))}
                 </div>
-              )
+              );
             })}
           </div>
 
@@ -203,7 +203,7 @@ function MealTable(props: MealTableProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default React.memo(MealTable);

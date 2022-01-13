@@ -1,7 +1,7 @@
 import type { FoodNutrients, Food } from './models';
 import type { Column, CellProps, TableOptions } from 'react-table';
 
-import React, { useCallback } from 'react'
+import React, { useCallback } from 'react';
 import FoodListActions from './FoodListActions';
 import { useTable } from 'react-table';
 import { FixedSizeList } from 'react-window';
@@ -125,7 +125,7 @@ function FoodList(props: FoodListTableProps) {
             </div>
           ))}
         </div>
-      )
+      );
     }, 
     [prepareRow, rows]
   );
@@ -165,7 +165,7 @@ function FoodList(props: FoodListTableProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function compareProps(prev: Readonly<FoodListTableProps>, next: Readonly<FoodListTableProps>) {

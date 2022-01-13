@@ -21,7 +21,7 @@ const compareFns: Record<string, FoodComparatorGen> = {
   '<': (n, x) => ((f: Food) => f[n] < x),
   '>=': (n, x) => ((f: Food) => f[n] >= x),
   '<=': (n, x) => ((f: Food) => f[n] <= x),
-}
+};
 
 // TODO use localized keys
 /** Shorthands used to refer to nutrients in the search text */
@@ -30,10 +30,10 @@ const nutrientKeys: Record<string, FoodNutrients> = {
   'en': 'energy',
   'zs': 'fat',
   'fe': 'protein'
-}
+};
 
 // eg. "pr < 5.25" -> [pr, <, 5.25]
-const segmentRe = /(.*?)(==|<=|>=|<|>|=)((([1-9][0-9]*)|(0))([.,][0-9]+)?)/i
+const segmentRe = /(.*?)(==|<=|>=|<|>|=)((([1-9][0-9]*)|(0))([.,][0-9]+)?)/i;
 
 /**
  * Attempt to parse a string and create a filter that constrains the value
@@ -71,7 +71,7 @@ function nameFilter(sgm: string): FoodFilter {
     const search = sgm.toLowerCase().replace(/\s+/, '');
 
     return fname.includes(search);
-  }
+  };
 }
 
 /** Check if a string could be transformed into a comparison filter */
@@ -97,7 +97,7 @@ function parseFilter(str: string): FoodFilter {
 
   // Empty string means no filter
   if (!str) {
-    return () => true
+    return () => true;
   }
 
   if (!containsComparison(str)) {
@@ -169,7 +169,7 @@ function FoodListFilter(props: FoodListFilterProps) {
     else {
       setChecked(allChecked(categories));
     }
-  }
+  };
 
   // Initialize all category filters to `checked`
   useEffect(() => setChecked(allChecked(categories)), [setChecked, categories]);
@@ -185,10 +185,10 @@ function FoodListFilter(props: FoodListFilterProps) {
 
       // `checked` may be accessed directly, since it always contains
       // all the relevant keys (and therefore is not modified)
-      onFilterChanged(f => textFilter(f) && checked[f.category])
+      onFilterChanged(f => textFilter(f) && checked[f.category]);
     },
     [textFilter, checked, onFilterChanged]
-  )
+  );
 
   return (
     <div>
@@ -213,9 +213,9 @@ function FoodListFilter(props: FoodListFilterProps) {
         ))}
       </span>
     </div>
-  )
+  );
 }
 
 
 export default React.memo(FoodListFilter);
-export { parseFilter }
+export { parseFilter };

@@ -1,6 +1,6 @@
 import type { Food } from './models';
 
-import React from 'react'
+import React from 'react';
 
 interface FoodListActionsProps {
   record: Food;
@@ -34,7 +34,7 @@ function FoodListActions(props: FoodListActionsProps) {
         onMouseLeave={onMouseLeave}
       >+1</button>
     </>
-  )
+  );
 }
 
 export default FoodListActions;

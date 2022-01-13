@@ -35,7 +35,7 @@ const db = getFirestore(app);
 
 // TODO handle errors
 enableIndexedDbPersistence(db)
-  .catch(reason => { })
+  .catch(reason => { });
 
 /**
  * Create a converter that transforms Firestore documents into models by
@@ -51,9 +51,9 @@ function createPlainConverter<T extends { id?: string }>(): FirestoreDataConvert
       return doc;
     },
     fromFirestore: (snapshot, options) => {
-      return { ...snapshot.data(options), id: snapshot.id } as T
+      return { ...snapshot.data(options), id: snapshot.id } as T;
     },
-  }
+  };
 }
 
 // Converters
@@ -117,11 +117,11 @@ async function addProject(userID: string, args: ProjectInit): Promise<ProjectIni
 
   // Create project entry
   const newProject = await addDoc(projects, { name: args.project.name });
-  const projectWithID = { ...args.project, id: newProject.id }
+  const projectWithID = { ...args.project, id: newProject.id };
 
   // Add blueprints
   const blueprintRequests = args.blueprints
-    .map(bp => addDoc(collection(newProject, 'blueprints'), bp))
+    .map(bp => addDoc(collection(newProject, 'blueprints'), bp));
   const blueprintsWithID = (await Promise.all(blueprintRequests))
     .map((doc, idx) => ({ ...args.blueprints[idx], id: doc.id }));
 
@@ -129,7 +129,7 @@ async function addProject(userID: string, args: ProjectInit): Promise<ProjectIni
   return {
     project: projectWithID,
     blueprints: blueprintsWithID,
-  }
+  };
 }
 
 // Food category
@@ -165,7 +165,7 @@ async function addMealBlueprint(
   blueprint: MealBlueprint
 ) {
   const result = await addDoc(blueprintCollection(userID, projectID), blueprint);
-  return { ...blueprint, id: result.id }
+  return { ...blueprint, id: result.id };
 }
 
 async function getMealBlueprints(userID: string, projectID: string) {
@@ -202,7 +202,7 @@ async function getMeals(
 
 async function addMeal(userID: string, projectID: string, meal: Meal) {
   const result = await addDoc(mealCollection(userID, projectID), meal);
-  return { ...result, id: result.id }
+  return { ...result, id: result.id };
 }
 
 async function updateMeal(userID: string, projectID: string, meal: Meal) {
@@ -225,7 +225,7 @@ export {
   updateMeal,
   getMealBlueprints,
   addMealBlueprint,
-}
+};
 
 const API = {
   saveSession,
@@ -240,6 +240,6 @@ const API = {
   updateMeal,
   getMealBlueprints,
   addMealBlueprint,
-}
+};
 
 export default API;

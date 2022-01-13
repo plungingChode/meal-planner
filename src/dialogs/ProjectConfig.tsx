@@ -26,7 +26,7 @@ const nutrients: Record<FoodNutrients, NutrientAttributes> = {
     unit: 'g',
     localizedName: 'fat'
   },
-}
+};
 
 interface LimitEntryProps {
   idx: number;
@@ -42,7 +42,7 @@ const limitStrings = {
     fieldName: 'min',
     errorMessage: 'Minimum value is not a number'  
   }
-}
+};
 function LimitEntry(props: LimitEntryProps) {
   const { register, getValues } = useFormContext();
   const { unit } = nutrients[props.nutrient];
@@ -79,7 +79,7 @@ function LimitEntry(props: LimitEntryProps) {
       return currentStrings.errorMessage;
     }
     return true;
-  }
+  };
 
   return (
     <>
@@ -109,7 +109,7 @@ function LimitEntry(props: LimitEntryProps) {
         </span>
       </div>
     </>
-  )
+  );
 }
 
 interface BlueprintRowProps {
@@ -141,7 +141,7 @@ function BlueprintRow(props: BlueprintRowProps) {
       <LimitEntry idx={props.idx} nutrient='protein' />
       <LimitEntry idx={props.idx} nutrient='fat' />
     </div>
-  )
+  );
 }
 
 interface ConfigFormData {
@@ -184,7 +184,7 @@ function ProjectConfig(props: ProjectConfigProps) {
 
   const validateProjectName = (name: string) => {
     if(existingProjects.includes(name)) {
-      return "A project with this name already exists."
+      return 'A project with this name already exists.';
     }
     return true;
   };
